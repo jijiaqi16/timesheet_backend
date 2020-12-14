@@ -6,7 +6,5 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public interface UserService {
 
-    String login(Employee employee);
-    String logout(Employee employee);
     Employee getUser(String username);
 }

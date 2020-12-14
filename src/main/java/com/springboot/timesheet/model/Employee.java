@@ -25,15 +25,15 @@ public class Employee {
     private String phone;
     @Column(name = "emp_department")
     private String department;
-    @Column(name = "emp_identity")
-    private String identity;
+
 
     @Column(name = "emp_username")
     private String username;
     @Column(name = "emp_password")
     private String password;
-    @Column(name = "emp_login")
-    private Boolean login;
+    @Column(name = "emp_identity")
+    private String identity;
+
 
 
     public Employee() {}
@@ -50,7 +50,7 @@ public class Employee {
         this.identity = identity;
         this.username = username;
         this.password = password;
-        this.login = login;
+
     }
 
     public long getId() {
@@ -149,11 +149,5 @@ public class Employee {
         this.password = password;
     }
 
-    public Boolean getLogin() {
-        return login;
-    }
 
-    public void setLogin(Boolean login) {
-        this.login = login;
-    }
 }
