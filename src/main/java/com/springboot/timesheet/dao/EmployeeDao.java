@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface EmployeeDao extends JpaRepository<Employee,Long> {
     Employee findEmployeeByUsername(String username);
     Employee saveAndFlush(Employee employee);
+
 }

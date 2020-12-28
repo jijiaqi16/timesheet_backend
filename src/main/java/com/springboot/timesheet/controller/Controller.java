@@ -1,10 +1,15 @@
 package com.springboot.timesheet.controller;
 
 import com.springboot.timesheet.model.Employee;
+import com.springboot.timesheet.model.Timesheet;
+import com.springboot.timesheet.service.dao.TimesheetService;
 import com.springboot.timesheet.service.dao.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -12,27 +17,21 @@ public class Controller {
     @Autowired
     private UserService userService;
 
-//    @RequestMapping("/login")
-//    @ResponseBody
-//    public String login(@RequestBody Employee employee){
-//        return userService.login(employee);
-//    }
-//
-//    @RequestMapping("/logout")
-//    @ResponseBody
-//    public String logout(@RequestBody Employee employee){
-//        return userService.logout(employee);
-//    }
+    @Autowired
+    private TimesheetService timesheetService;
 
     @RequestMapping("/getuser")
     @ResponseBody
     public Employee getuser(@RequestBody String username) {
+        System.out.println(username);
         return userService.getUser(username);
     }
 
     @RequestMapping("/role")
     @ResponseBody
-    public String role(){return "role";}
+    public String role() {
+        return "role";
+    }
 
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     @GetMapping("/hello")
@@ -54,5 +53,23 @@ public class Controller {
     public String test() {
         return "TEST";
     }
+
+    //timesheet add timesheet
+    @RequestMapping(
+            value = "/creatTimesheet",
+            method = RequestMethod.POST)
+    public void process(@RequestBody Map<String, Object> payload) throws Exception {
+        timesheetService.addTimesheet(payload);
+    }
+
+    //timesheet show timesheet
+    @RequestMapping("/showtimesheet")
+    @ResponseBody
+    public Map<String, Timesheet> showTimesheet(@RequestBody Map<String, Object> payload) throws ParseException {
+        System.out.println("lsdjflsdjfl");
+        return timesheetService.showTimesheet((String)payload.get("startDate"), (String) payload.get("username"));
+    }
+    //project
+
 
 }
