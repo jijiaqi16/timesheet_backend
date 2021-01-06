@@ -16,6 +16,8 @@ public class Project {
     private String client;
     @Column(name = "project_desc")
     private String description;
+    @Column(name="project_supervisor")
+    private String supervisor;
 
     public long getId() {
         return id;
@@ -47,5 +49,13 @@ public class Project {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(String supervisor) {
+        this.supervisor = supervisor;
     }
 }

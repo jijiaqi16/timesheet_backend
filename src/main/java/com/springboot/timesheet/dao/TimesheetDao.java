@@ -28,4 +28,11 @@ public interface TimesheetDao extends JpaRepository<Timesheet, Long> {
             "join employee on te.emp_id=employee.id\n" +
             "where (timesheet.timesheet_start_date=? && employee.emp_username=?);", nativeQuery = true)
     List<Timesheet> findByStartDateAndUsername(Date startDate,String username);
+
+    Timesheet findTimesheetById(Long id);
+
+    @Modifying
+    @Query(value = "update timesheet set timesheet_Sunday=?,timesheet_Monday=?,timesheet_Tuesday=?,timesheet_Wednesday=?,timesheet_Thursday=?,timesheet_Friday=?,timesheet_Saturday=? where id=?;", nativeQuery = true)
+    @Transactional
+    void updateTimesheet(Integer su,Integer mo,Integer tu,Integer we,Integer th,Integer fr,Integer sa,Long id);
 }

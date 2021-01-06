@@ -1,7 +1,9 @@
 package com.springboot.timesheet.controller;
 
 import com.springboot.timesheet.model.Employee;
+import com.springboot.timesheet.model.Project;
 import com.springboot.timesheet.model.Timesheet;
+import com.springboot.timesheet.service.ProjectService;
 import com.springboot.timesheet.service.dao.TimesheetService;
 import com.springboot.timesheet.service.dao.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -19,6 +22,9 @@ public class Controller {
 
     @Autowired
     private TimesheetService timesheetService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @RequestMapping("/getuser")
     @ResponseBody
@@ -66,10 +72,23 @@ public class Controller {
     @RequestMapping("/showtimesheet")
     @ResponseBody
     public Map<String, Timesheet> showTimesheet(@RequestBody Map<String, Object> payload) throws ParseException {
-        System.out.println("lsdjflsdjfl");
         return timesheetService.showTimesheet((String)payload.get("startDate"), (String) payload.get("username"));
     }
+
+    //timesheet save timesheet
+    @RequestMapping("/savetimesheet")
+    @ResponseBody
+    public String saveTimesheet(@RequestBody Map<String,Map<String,String>> timesheetmap) {
+        timesheetService.saveTimesheet(timesheetmap);
+        return "save Success";
+    }
+
     //project
+    @RequestMapping("/getproject")
+    @ResponseBody
+    public List<Project> getproject(@RequestBody String username) {
+        return projectService.getProjectByUsername(username);
+    }
 
 
 }

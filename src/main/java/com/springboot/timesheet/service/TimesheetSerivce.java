@@ -69,16 +69,58 @@ public class TimesheetSerivce implements TimesheetService {
     }
 
     @Override
-    public Map<String, Timesheet> showTimesheet(String startDate,String username)  throws ParseException {
+    public Map<String, Timesheet> showTimesheet(String startDate, String username) throws ParseException {
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date startdate = sdf.parse(startDate);
         java.sql.Date startDateSql = new java.sql.Date(startdate.getTime());
-        Map<String,Timesheet> map = new HashMap<>();
-       List<Timesheet> timesheets= timesheetDao.findByStartDateAndUsername(startDateSql,username);
-       for(Timesheet timesheet:timesheets){
-           map.put(projectDao.findProjectNameByTimesheetId(timesheet.getId()),timesheet);
-       }
+        List<Timesheet> timesheets = timesheetDao.findByStartDateAndUsername(startDateSql, username);
+        if (timesheets.isEmpty()) {
+            return null;
+        }
+        Map<String, Timesheet> map = new HashMap<>();
+
+        int[] totalDay = {0, 0, 0, 0, 0, 0, 0};
+        Timesheet totalTimesheet = new Timesheet();
+        for (Timesheet timesheet : timesheets) {
+            int total = 0;
+            map.put(projectDao.findProjectNameByTimesheetId(timesheet.getId()), timesheet);
+            totalDay[0] += timesheet.getSu();
+            totalDay[1] += timesheet.getMo();
+            totalDay[2] += timesheet.getTu();
+            totalDay[3] += timesheet.getWe();
+            totalDay[4] += timesheet.getTh();
+            totalDay[5] += timesheet.getFr();
+            totalDay[6] += timesheet.getSa();
+        }
+        totalTimesheet.setSu(totalDay[0]);
+        totalTimesheet.setMo(totalDay[1]);
+        totalTimesheet.setTu(totalDay[2]);
+        totalTimesheet.setWe(totalDay[3]);
+        totalTimesheet.setTh(totalDay[4]);
+        totalTimesheet.setFr(totalDay[5]);
+        totalTimesheet.setSa(totalDay[6]);
+        map.put("Total(/day)", totalTimesheet);
+        totalTimesheet = null;
         System.out.println(map);
-       return map;
+        return map;
+    }
+
+    @Override
+    public void saveTimesheet(Map<String, Map<String, String>> timesheetMap) {
+        for (String key : timesheetMap.keySet()) {
+            Timesheet timesheet=timesheetDao.findTimesheetById(Long.parseLong(timesheetMap.get(key).get("id")));
+            if(timesheet!=null){
+                Integer su = Integer.parseInt(timesheetMap.get(key).get("su"));
+                Integer mo = Integer.parseInt(timesheetMap.get(key).get("mo"));
+                Integer tu = Integer.parseInt(timesheetMap.get(key).get("tu"));
+                Integer we = Integer.parseInt(timesheetMap.get(key).get("we"));
+                Integer th = Integer.parseInt(timesheetMap.get(key).get("th"));
+                Integer fr = Integer.parseInt(timesheetMap.get(key).get("fr"));
+                Integer sa = Integer.parseInt(timesheetMap.get(key).get("sa"));
+                Long timesheetId = Long.parseLong(timesheetMap.get(key).get("id"));
+                timesheetDao.updateTimesheet(su,mo,tu,we,th,fr,sa,timesheetId);
+            }
+        }
     }
 }
