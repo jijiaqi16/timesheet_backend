@@ -9,5 +9,5 @@ import java.util.Map;
 public interface TimesheetService {
     void addTimesheet(Map<String, Object> payload) throws ParseException;
     Map<String, Timesheet> showTimesheet(String startDate,String username) throws ParseException;
-    void  saveTimesheet(Map<String,Map<String,String>> timesheetMap);
+    void  saveTimesheet(Map<String,Map<String,Object>> timesheetMap) throws ParseException;
 }

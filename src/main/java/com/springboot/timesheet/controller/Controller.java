@@ -64,7 +64,7 @@ public class Controller {
     @RequestMapping(
             value = "/creatTimesheet",
             method = RequestMethod.POST)
-    public void process(@RequestBody Map<String, Object> payload) throws Exception {
+    public void createTimesheet(@RequestBody Map<String, Object> payload) throws Exception {
         timesheetService.addTimesheet(payload);
     }
 
@@ -78,7 +78,8 @@ public class Controller {
     //timesheet save timesheet
     @RequestMapping("/savetimesheet")
     @ResponseBody
-    public String saveTimesheet(@RequestBody Map<String,Map<String,String>> timesheetmap) {
+    public String saveTimesheet(@RequestBody Map<String,Map<String,Object>> timesheetmap) throws ParseException {
+        System.out.println(timesheetmap);
         timesheetService.saveTimesheet(timesheetmap);
         return "save Success";
     }
